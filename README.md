@@ -55,6 +55,16 @@ root=/dev/vda ip=192.168.10.2/24:192.168.10.1 endpoint=/bin/bash
 - Auto mount necessary filesystems such as /dev, /proc, /sys, etc
 - Shutdown VM if entrypoint exits
 
+## Supported Commandline Arguments
+
+- `hostname` is the hostname
+- `dns` is the dns server
+- `root` is the root device
+- `rootfstype` is the root filesystem type, default is `ext4`
+- `ip` is the static ip
+- `endpoint` is the entrypoint
+
+
 ## Rescue Shell
 
 Firefly can run a rescue shell if something goes wrong. Such as cannot found root device, entrypoint not found...
