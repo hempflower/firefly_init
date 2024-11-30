@@ -98,12 +98,6 @@ var mountPoints = []*MountPoint{
 		Flags:  0,
 	},
 	{
-		Source: "/dev/fd",
-		FsType: "fdfs",
-		Path:   "/dev/fd",
-		Flags:  0,
-	},
-	{
 		Source: "run",
 		FsType: "tmpfs",
 		Path:   "/run",
@@ -363,6 +357,11 @@ func main() {
 	}
 	// Re mount
 	mountAll(mountPoints, "/")
+
+	// make link /proc/self/fd to /dev/fd
+	if err := os.Symlink("/proc/self/fd", "/dev/fd"); err != nil {
+		log.Printf("Failed to symlink /proc/self/fd to /dev: %s", err)
+	}
 
 	hostname, ok := cmdline["hostname"]
 	if !ok {
