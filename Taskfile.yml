@@ -1,0 +1,30 @@
+version: "3"
+tasks:
+  mkdir:
+    cmds:
+      - mkdir -p build
+      - mkdir -p build/initramfs
+  build-init:
+    dir: firefly
+    cmds:
+      - go build -o ../build/init .
+    env:
+      CGO_ENABLED: "0"
+  build-busybox:
+    deps:
+      - mkdir
+    cmds:
+      - ./build_busybox.sh
+  rootfs:
+    deps:
+      - mkdir
+    cmds:
+      - task: build-init
+      - cp build/init build/initramfs/init
+      - chmod +x build/initramfs/init
+  initramfs:
+    deps:
+      - rootfs
+    dir: build/initramfs
+    cmds:
+      - find . | cpio -o -H newc > ../initramfs.cpio
